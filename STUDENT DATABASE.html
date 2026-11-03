@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VectorEd Academy - Student Trust & Confidence Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            900: '#0B192C',
+                            800: '#112238',
+                            700: '#1B304A',
+                        },
+                        amber: {
+                            custom: '#F59E0B',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0B192C; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0B192C; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1B304A; border-radius: 3px; }
+        .carousel-track {
+            display: flex;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
+        }
+        @keyframes pulse-subtle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .cta-pulse {
+            animation: pulse-subtle 2.5s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="h-full text-slate-100 flex flex-col antialiased selection:bg-amber-500 selection:text-white">
+
+    <!-- Header & Navigation -->
+    <header class="bg-[#0B192C] border-b border-slate-800 sticky top-0 z-40 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo & Branding -->
+            <div class="flex items-center space-x-3">
+                <img src="https://iili.io/ndL8PQj.png" alt="VectorEd Academy Logo" class="h-12 w-12 object-contain rounded-lg bg-slate-800 p-1 border border-slate-700 shadow-inner" onerror="this.src='https://placehold.co/100x100/112238/F59E0B?text=VE'">
+                <div>
+                    <span class="text-xl sm:text-2xl font-extrabold tracking-tight text-white">Vector<span class="text-amber-custom">Ed</span> Academy</span>
+                    <p class="text-xs text-slate-400 font-medium tracking-wide uppercase">Student Trust & Confidence Dashboard</p>
+                </div>
+            </div>
+
+            <!-- Right Controls: Sync Status, CTA & Admin Modal Trigger -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <div id="syncStatusBadge" class="hidden lg:flex items-center space-x-2 text-xs bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700 text-slate-300 shadow-sm">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" id="syncDot"></span>
+                    <span id="syncText">Cloud Synced</span>
+                </div>
+
+                <!-- Strategic Header CTA Button -->
+                <a href="https://vectored-academy.netlify.app" target="_blank" rel="noopener noreferrer" class="cta-pulse flex items-center space-x-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-extrabold px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl shadow-lg transition-all duration-200 transform hover:scale-105 active:scale-95 text-xs sm:text-sm border border-emerald-400/30">
+                    <i class="fa-solid fa-calendar-check text-xs"></i>
+                    <span class="hidden sm:inline">Book Free Consultation</span>
+                    <span class="sm:hidden">Book Free Class</span>
+                </a>
+
+                <button onclick="openAdminModal()" class="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl border border-slate-700 transition-all duration-200 text-xs sm:text-sm" title="Admin Portal">
+                    <i class="fa-solid fa-lock text-xs"></i>
+                    <span class="hidden md:inline">Admin</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs Bar -->
+        <div class="bg-[#112238] border-t border-slate-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav class="flex space-x-2 sm:space-x-8 overflow-x-auto py-3 no-scrollbar" aria-label="Tabs">
+                    <button onclick="switchTab('philippines')" id="tab-philippines" class="tab-btn whitespace-nowrap px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 bg-amber-500 text-navy-900 shadow-md">
+                        <i class="fa-solid fa-earth-asia"></i>
+                        <span>Local Students in the Philippines</span>
+                    </button>
+                    <button onclick="switchTab('international')" id="tab-international" class="tab-btn whitespace-nowrap px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-slate-800">
+                        <i class="fa-solid fa-globe"></i>
+                        <span>International Students</span>
+                    </button>
+                    <button onclick="switchTab('special')" id="tab-special" class="tab-btn whitespace-nowrap px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-slate-800">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span>Special Program Students</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Controls & Search Bar -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-slate-900/50 p-4 rounded-2xl border border-slate-800 shadow-lg backdrop-blur-sm">
+            <div>
+                <h2 id="currentCategoryTitle" class="text-xl sm:text-2xl font-bold text-white flex items-center space-x-3">
+                    <i class="fa-solid fa-users text-amber-custom"></i>
+                    <span>Local Students in the Philippines</span>
+                </h2>
+                <p id="currentCategoryDesc" class="text-sm text-slate-400 mt-1">Verified student testimonials and institution affiliations across the Philippines.</p>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <div class="relative flex-1 md:w-72">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <i class="fa-solid fa-search"></i>
+                    </span>
+                    <input type="text" id="searchInput" oninput="filterStudents()" placeholder="Search students, schools, or courses..." class="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all">
+                </div>
+                <button onclick="triggerSync(true)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 p-2.5 rounded-xl border border-slate-700 transition-all text-sm flex items-center justify-center" title="Sync with Cloud">
+                    <i class="fa-solid fa-rotate" id="syncIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Carousel Container -->
+        <div id="carouselWrapper" class="relative group">
+            <!-- Navigation Buttons -->
+            <button id="prevBtn" onclick="moveCarousel(-1)" class="absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-slate-800/90 border border-slate-700 text-white flex items-center justify-center shadow-xl hover:bg-amber-500 hover:text-navy-900 transition-all duration-200 focus:outline-none disabled:opacity-30 disabled:cursor-not-allowed">
+                <i class="fa-solid fa-chevron-left text-sm sm:text-base"></i>
+            </button>
+            <button id="nextBtn" onclick="moveCarousel(1)" class="absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-slate-800/90 border border-slate-700 text-white flex items-center justify-center shadow-xl hover:bg-amber-500 hover:text-navy-900 transition-all duration-200 focus:outline-none disabled:opacity-30 disabled:cursor-not-allowed">
+                <i class="fa-solid fa-chevron-right text-sm sm:text-base"></i>
+            </button>
+
+            <!-- Carousel Viewport & Track -->
+            <div id="carouselViewport" class="overflow-hidden rounded-3xl p-1">
+                <div id="studentGrid" class="carousel-track">
+                    <!-- Dynamically populated student cards -->
+                </div>
+            </div>
+
+            <!-- Carousel Pagination Dots -->
+        <div id="carouselPagination" class="flex justify-center items-center space-x-2 mt-6">
+            <!-- Dynamic dots -->
+        </div>
+    </div>
+
+    <!-- High Conversion Bottom CTA Banner (Strategic Post-Review Placement) -->
+    <div class="mt-12 bg-gradient-to-r from-navy-800 via-navy-700 to-navy-800 border border-slate-700 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="absolute -left-10 -top-10 w-48 h-48 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+        <div class="space-y-2 text-center md:text-left z-10 max-w-2xl">
+            <div class="inline-flex items-center space-x-2 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full text-xs font-semibold text-amber-custom">
+                <i class="fa-solid fa-star text-xs"></i>
+                <span>Proven Academic Growth & Test Prep Excellence</span>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight">Ready to Achieve Academic Success Like Our Students?</h3>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">Schedule a personalized 1-on-1 consultation or request a trial mentorship session with our expert tutors today.</p>
+        </div>
+
+        <div class="z-10 flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+            <a href="https://vectored-academy.netlify.app" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto text-center bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-navy-900 font-black px-6 py-3.5 rounded-2xl shadow-xl transition-all duration-200 transform hover:scale-105 active:scale-95 text-sm flex items-center justify-center space-x-2.5">
+                <span>Book Free Consultation</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+        <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center bg-slate-900/30 rounded-3xl border border-dashed border-slate-800">
+            <div class="h-16 w-16 bg-slate-800 rounded-full flex items-center justify-center text-slate-500 text-2xl mb-4">
+                <i class="fa-solid fa-user-slash"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white">No Student Records Found</h3>
+            <p class="text-sm text-slate-400 max-w-sm mt-1">There are no student trust records in this category yet, or your search query did not match any entries.</p>
+            <button onclick="openAdminModal()" class="mt-4 px-4 py-2 bg-amber-500 text-navy-900 font-bold rounded-xl text-sm hover:bg-amber-600 transition-all">
+                Add New Student (Admin)
+            </button>
+        </div>
+    </main>
+
+    <!-- Admin Authentication Modal -->
+    <div id="adminAuthModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md hidden">
+        <div class="bg-[#112238] border border-slate-700 rounded-3xl p-6 sm:p-8 w-full max-w-md shadow-2xl transform transition-all">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="h-10 w-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-custom">
+                        <i class="fa-solid fa-shield-halved text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">Admin Authentication</h3>
+                        <p class="text-xs text-slate-400">Enter security password to access management portal</p>
+                    </div>
+                </div>
+                <button onclick="closeAuthModal()" class="text-slate-400 hover:text-white p-2 rounded-lg transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Admin Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-key"></i>
+                        </span>
+                        <input type="password" id="adminPasswordInput" required placeholder="Enter admin password" class="w-full pl-10 pr-10 py-3 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-200">
+                            <i class="fa-solid fa-eye" id="togglePassIcon"></i>
+                        </button>
+                    </div>
+                    <p id="authErrorMsg" class="text-xs text-red-400 mt-2 hidden"></p>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-navy-900 font-extrabold rounded-xl shadow-lg transition-all text-sm">
+                    Authenticate & Access Portal
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Management Portal Modal -->
+    <div id="adminDashboardModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md hidden p-4 sm:p-6 overflow-y-auto">
+        <div class="bg-[#0B192C] border border-slate-700 rounded-3xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[90vh] my-auto">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-slate-800 flex items-center justify-between bg-[#112238] rounded-t-3xl">
+                <div class="flex items-center space-x-3">
+                    <div class="h-10 w-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-custom">
+                        <i class="fa-solid fa-sliders text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">VectorEd Admin Management Portal</h3>
+                        <p class="text-xs text-slate-400">Manage student trust records, university rosters, and security settings</p>
+                    </div>
+                </div>
+                <button onclick="closeAdminDashboard()" class="text-slate-400 hover:text-white p-2 rounded-xl bg-slate-800 transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Portal Tabs -->
+            <div class="flex border-b border-slate-800 bg-[#112238]/50 px-6 space-x-6">
+                <button onclick="switchAdminTab('students')" id="adminTab-students" class="admin-tab-btn py-3 border-b-2 border-amber-500 text-amber-custom text-sm font-bold flex items-center space-x-2">
+                    <i class="fa-solid fa-user-graduate"></i>
+                    <span>Student Records</span>
+                </button>
+                <button onclick="switchAdminTab('universities')" id="adminTab-universities" class="admin-tab-btn py-3 border-b-2 border-transparent text-slate-400 hover:text-white text-sm font-medium flex items-center space-x-2">
+                    <i class="fa-solid fa-university"></i>
+                    <span>University / School Roster</span>
+                </button>
+                <button onclick="switchAdminTab('settings')" id="adminTab-settings" class="admin-tab-btn py-3 border-b-2 border-transparent text-slate-400 hover:text-white text-sm font-medium flex items-center space-x-2">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Security Settings</span>
+                </button>
+            </div>
+
+            <!-- Modal Body (Scrollable) -->
+            <div class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-6">
+                
+                <!-- SECTION 1: STUDENTS MANAGEMENT -->
+                <div id="adminSection-students" class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-md font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-plus-circle text-amber-custom"></i>
+                            <span id="studentFormTitle">Add New Student Entry</span>
+                        </h4>
+                        <button type="button" onclick="resetStudentForm()" id="cancelStudentEditBtn" class="hidden text-xs text-slate-400 hover:text-white underline">Cancel Edit</button>
+                    </div>
+
+                    <!-- Add/Edit Student Form -->
+                    <form id="studentForm" onsubmit="saveStudentEntry(event)" class="bg-[#112238] p-5 rounded-2xl border border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input type="hidden" id="editStudentId">
+                        
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Student Name</label>
+                            <input type="text" id="inputStudentName" required placeholder="e.g. Maria Santos" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Category / Group</label>
+                            <select id="inputStudentCategory" required class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                <option value="philippines">Local Students in the Philippines</option>
+                                <option value="international">International Students</option>
+                                <option value="special">Special Program Students</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">University / School Name</label>
+                            <select id="inputStudentSchool" required onchange="previewSelectedSchoolLogo()" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                <!-- Populated dynamically from university roster -->
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Year Level</label>
+                            <select id="inputStudentYearLevel" required class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                <option value="High School">High School</option>
+                                <option value="Senior High School">Senior High School</option>
+                                <option value="College">College</option>
+                            </select>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Course or Package Availed</label>
+                            <input type="text" id="inputStudentCourse" required placeholder="e.g. Advanced STEM Mentorship & Test Prep Package" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Student Feedback / Testimonial</label>
+                            <textarea id="inputStudentFeedback" rows="3" required placeholder="Enter student testimonial building trust and confidence..." class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"></textarea>
+                        </div>
+
+                        <div class="sm:col-span-2 flex justify-end space-x-3 pt-2">
+                            <button type="submit" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-navy-900 font-extrabold rounded-xl text-sm shadow-lg transition-all">
+                                <i class="fa-solid fa-save mr-1.5"></i> Save Student Record
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Existing Students List Table -->
+                    <div>
+                        <h4 class="text-md font-bold text-white mb-3">All Student Entries</h4>
+                        <div class="bg-[#112238] rounded-2xl border border-slate-800 overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse text-sm">
+                                    <thead>
+                                        <tr class="bg-slate-900/80 text-slate-400 uppercase text-xs tracking-wider border-b border-slate-800">
+                                            <th class="py-3 px-4">Student Name</th>
+                                            <th class="py-3 px-4">Category</th>
+                                            <th class="py-3 px-4">School</th>
+                                            <th class="py-3 px-4">Course / Package</th>
+                                            <th class="py-3 px-4">Year Level</th>
+                                            <th class="py-3 px-4 text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminStudentsTableBody" class="divide-y divide-slate-800 text-slate-300">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: UNIVERSITY ROSTER MANAGEMENT -->
+                <div id="adminSection-universities" class="space-y-6 hidden">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-md font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-university text-amber-custom"></i>
+                            <span id="uniFormTitle">Add New University / School</span>
+                        </h4>
+                        <button type="button" onclick="resetUniForm()" id="cancelUniEditBtn" class="hidden text-xs text-slate-400 hover:text-white underline">Cancel Edit</button>
+                    </div>
+
+                    <!-- Add/Edit University Form -->
+                    <form id="uniForm" onsubmit="saveUniversityEntry(event)" class="bg-[#112238] p-5 rounded-2xl border border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input type="hidden" id="editUniId">
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">School / University Name</label>
+                            <input type="text" id="inputUniName" required placeholder="e.g. University of the Philippines" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Official Logo Image Link (URL)</label>
+                            <input type="url" id="inputUniLogo" required placeholder="https://example.com/logo.png" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+
+                        <div class="sm:col-span-2 flex justify-end space-x-3 pt-2">
+                            <button type="submit" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-navy-900 font-extrabold rounded-xl text-sm shadow-lg transition-all">
+                                <i class="fa-solid fa-save mr-1.5"></i> Save Institution
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Existing Universities Table -->
+                    <div>
+                        <h4 class="text-md font-bold text-white mb-3">Registered Institutions & Logos</h4>
+                        <div class="bg-[#112238] rounded-2xl border border-slate-800 overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse text-sm">
+                                    <thead>
+                                        <tr class="bg-slate-900/80 text-slate-400 uppercase text-xs tracking-wider border-b border-slate-800">
+                                            <th class="py-3 px-4">Logo</th>
+                                            <th class="py-3 px-4">Institution Name</th>
+                                            <th class="py-3 px-4">Logo Image URL</th>
+                                            <th class="py-3 px-4 text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminUniversitiesTableBody" class="divide-y divide-slate-800 text-slate-300">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 3: SECURITY SETTINGS -->
+                <div id="adminSection-settings" class="space-y-6 hidden">
+                    <div class="bg-[#112238] p-6 rounded-2xl border border-slate-800 max-w-lg">
+                        <h4 class="text-md font-bold text-white mb-2 flex items-center space-x-2">
+                            <i class="fa-solid fa-key text-amber-custom"></i>
+                            <span>Change Admin Password</span>
+                        </h4>
+                        <p class="text-xs text-slate-400 mb-6">Update the master security password required to access the admin portal and perform additions, edits, or deletions.</p>
+
+                        <form onsubmit="handlePasswordChange(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Current Password</label>
+                                <input type="password" id="currentPassField" required placeholder="Enter current password" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">New Password</label>
+                                <input type="password" id="newPassField" required placeholder="Enter new password" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Confirm New Password</label>
+                                <input type="password" id="confirmPassField" required placeholder="Confirm new password" class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            </div>
+
+                            <p id="passwordChangeMsg" class="text-xs font-medium"></p>
+
+                            <button type="submit" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-navy-900 font-extrabold rounded-xl text-sm shadow-lg transition-all">
+                                Update Password
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="p-4 border-t border-slate-800 bg-[#112238] rounded-b-3xl flex justify-between items-center">
+                <span class="text-xs text-slate-400 flex items-center space-x-1.5">
+                    <i class="fa-solid fa-cloud text-emerald-400"></i>
+                    <span>Changes instantly sync to Google Sheets Cloud</span>
+                </span>
+                <button onclick="closeAdminDashboard()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-semibold transition-all">
+                    Close Portal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Notification Modal -->
+    <div id="notificationModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden">
+        <div class="bg-[#112238] border border-slate-700 rounded-3xl p-6 w-full max-w-sm shadow-2xl text-center">
+            <div id="notifIconContainer" class="h-12 w-12 rounded-2xl mx-auto flex items-center justify-center text-xl mb-4 bg-amber-500/10 text-amber-custom border border-amber-500/20">
+                <i class="fa-solid fa-circle-check" id="notifIcon"></i>
+            </div>
+            <h4 id="notifTitle" class="text-lg font-bold text-white mb-1">Notification</h4>
+            <p id="notifMessage" class="text-xs text-slate-300 mb-6">Message goes here.</p>
+            <button onclick="closeNotification()" class="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-navy-900 font-bold rounded-xl text-sm shadow-lg transition-all">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzPQg6-lEU_TWOXJWwe_WWVGc0yTRHDQ3wQwarQ-rMA1gDZ8vzcdp7FUfAlOvstyD4G/exec";
+
+        // Initial default data structures
+        let appData = {
+            adminPassword: "VED@2025",
+            universities: [
+                { id: "uni-1", name: "University of the Philippines", logo: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=150&auto=format&fit=crop&q=80" },
+                { id: "uni-2", name: "Ateneo de Manila University", logo: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=150&auto=format&fit=crop&q=80" },
+                { id: "uni-3", name: "De La Salle University", logo: "https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80" },
+                { id: "uni-4", name: "National University of Singapore", logo: "https://images.unsplash.com/photo-14982436915f1-8f438914b433?w=150&auto=format&fit=crop&q=80" },
+                { id: "uni-5", name: "University of Melbourne", logo: "https://images.unsplash.com/photo-1592280771190-3e2e4d57ffa6?w=150&auto=format&fit=crop&q=80" }
+            ],
+            students: [
+                {
+                    id: "stu-1",
+                    name: "Andrea Nicole Reyes",
+                    category: "philippines",
+                    school: "University of the Philippines",
+                    yearLevel: "College",
+                    course: "Advanced Analytical Mentorship Package",
+                    feedback: "VectorEd Academy's mentoring program transformed my analytical approach. Their dedication instilled total confidence in my academic pathway!"
+                },
+                {
+                    id: "stu-2",
+                    name: "Gabriel Villanueva",
+                    category: "philippines",
+                    school: "Ateneo de Manila University",
+                    yearLevel: "Senior High School",
+                    course: "University Entrance Prep Elite",
+                    feedback: "The instructors are world-class. The structured guidance gave me the edge I needed for university entrance examinations."
+                },
+                {
+                    id: "stu-3",
+                    name: "Liam O'Connor",
+                    category: "international",
+                    school: "National University of Singapore",
+                    yearLevel: "College",
+                    course: "Global STEM Scholars Track",
+                    feedback: "Even studying abroad, VectorEd's remote consulting gave me immense clarity and trust in my career choices."
+                },
+                {
+                    id: "stu-4",
+                    name: "Sophia Tanaka",
+                    category: "international",
+                    school: "University of Melbourne",
+                    yearLevel: "College",
+                    course: "International Academic Excellence Program",
+                    feedback: "An extraordinary learning community! The confidence I gained here is unmatched."
+                },
+                {
+                    id: "stu-5",
+                    name: "Mateo Sebastian Cruz",
+                    category: "special",
+                    school: "De La Salle University",
+                    yearLevel: "High School",
+                    course: "Specialized STEM & Robotics Coaching",
+                    feedback: "The special STEM coaching program opened doors I never imagined possible. Highly recommended!"
+                }
+            ]
+        };
+
+        let activeTab = 'philippines';
+        let isAdminAuthenticated = false;
+
+        let currentCarouselIndex = 0;
+        let totalCarouselPages = 1;
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        // Initialize App on load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorageOrCloud();
+            renderDashboard();
+            setupCarouselTouchEvents();
+            window.addEventListener('resize', () => {
+                updateCarouselLayout();
+            });
+        });
+
+        function setupCarouselTouchEvents() {
+            const viewport = document.getElementById('carouselViewport');
+            if (!viewport) return;
+
+            viewport.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            viewport.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipeGesture();
+            }, { passive: true });
+        }
+
+        function handleSwipeGesture() {
+            const swipeThreshold = 40;
+            if (touchStartX - touchEndX > swipeThreshold) {
+                moveCarousel(1); // Swipe Left -> Next Page
+            } else if (touchEndX - touchStartX > swipeThreshold) {
+                moveCarousel(-1); // Swipe Right -> Prev Page
+            }
+        }
+
+        // Custom Notification Modal
+        function showNotification(title, message, isError = false) {
+            document.getElementById('notifTitle').innerText = title;
+            document.getElementById('notifMessage').innerText = message;
+            const icon = document.getElementById('notifIcon');
+            const iconContainer = document.getElementById('notifIconContainer');
+            if (isError) {
+                icon.className = "fa-solid fa-triangle-exclamation text-red-400";
+                iconContainer.className = "h-12 w-12 rounded-2xl mx-auto flex items-center justify-center text-xl mb-4 bg-red-500/10 text-red-400 border border-red-500/20";
+            } else {
+                icon.className = "fa-solid fa-circle-check text-amber-custom";
+                iconContainer.className = "h-12 w-12 rounded-2xl mx-auto flex items-center justify-center text-xl mb-4 bg-amber-500/10 text-amber-custom border border-amber-500/20";
+            }
+            document.getElementById('notificationModal').classList.remove('hidden');
+        }
+
+        function closeNotification() {
+            document.getElementById('notificationModal').classList.add('hidden');
+        }
+
+        // Tab Switching
+        function switchTab(tabKey) {
+            activeTab = tabKey;
+            currentCarouselIndex = 0;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn whitespace-nowrap px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-slate-800";
+            });
+            const activeBtn = document.getElementById(`tab-${tabKey}`);
+            if (activeBtn) {
+                activeBtn.className = "tab-btn whitespace-nowrap px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center space-x-2 bg-amber-500 text-navy-900 shadow-md";
+            }
+
+            const titles = {
+                philippines: { title: "Local Students in the Philippines", desc: "Verified student testimonials and institution affiliations across the Philippines." },
+                international: { title: "International Students", desc: "Global scholars building their futures through VectorEd Academy." },
+                special: { title: "Special Program Students", desc: "High-achieving participants in our specialized enrichment and advanced tracks." }
+            };
+
+            document.getElementById('currentCategoryTitle').innerHTML = `<i class="fa-solid fa-users text-amber-custom"></i><span>${titles[tabKey].title}</span>`;
+            document.getElementById('currentCategoryDesc').innerText = titles[tabKey].desc;
+
+            renderDashboard();
+        }
+
+        function renderDashboard() {
+            const grid = document.getElementById('studentGrid');
+            const emptyState = document.getElementById('emptyState');
+            const carouselWrapper = document.getElementById('carouselWrapper');
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+
+            const filtered = appData.students.filter(stu => {
+                const matchTab = stu.category === activeTab;
+                const matchSearch = stu.name.toLowerCase().includes(searchVal) || stu.school.toLowerCase().includes(searchVal) || (stu.course && stu.course.toLowerCase().includes(searchVal)) || stu.feedback.toLowerCase().includes(searchVal);
+                return matchTab && matchSearch;
+            });
+
+            grid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                carouselWrapper.classList.add('hidden');
+                return;
+            } else {
+                emptyState.classList.remove('flex');
+                emptyState.classList.add('hidden');
+                carouselWrapper.classList.remove('hidden');
+            }
+
+            filtered.forEach(stu => {
+                const uniObj = appData.universities.find(u => u.name === stu.school);
+                const logoUrl = uniObj ? uniObj.logo : 'https://placehold.co/150x150/112238/F59E0B?text=Logo';
+
+                const cardWrapper = document.createElement('div');
+                cardWrapper.className = "w-full md:w-1/2 lg:w-1/3 flex-shrink-0 p-3";
+
+                cardWrapper.innerHTML = `
+                    <div class="bg-[#EBF3FE] text-navy-900 rounded-3xl p-6 shadow-xl border border-blue-200 flex flex-col justify-between h-full transform transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 transform translate-x-4 -translate-y-4 w-24 h-24 bg-blue-400/10 rounded-full pointer-events-none"></div>
+                        
+                        <div>
+                            <!-- Top Header inside Card: Year Level badge -->
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-navy-900 text-amber-custom shadow-sm">
+                                    <i class="fa-solid fa-graduation-cap mr-1.5 text-[10px]"></i> ${stu.yearLevel}
+                                </span>
+                                <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">VectorEd Trust Verified</span>
+                            </div>
+
+                            <!-- Maximized University Logo Area -->
+                            <div class="flex flex-col items-center my-4">
+                                <div class="w-24 h-24 rounded-full bg-white border-4 border-white shadow-md overflow-hidden flex items-center justify-center mb-3">
+                                    <img src="${logoUrl}" alt="${stu.school} Logo" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/150x150/112238/F59E0B?text=Logo'">
+                                </div>
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 text-center px-2">${stu.school}</h4>
+                            </div>
+
+                            <!-- Student Details -->
+                            <div class="text-center mt-2">
+                                <h3 class="text-lg font-black text-navy-900 tracking-tight">${stu.name}</h3>
+                                ${stu.course ? `<div class="mt-1.5 inline-flex items-center px-3 py-1 bg-blue-100/80 border border-blue-200 rounded-lg text-xs font-semibold text-blue-900"><i class="fa-solid fa-book-open mr-1.5 text-amber-600"></i>${stu.course}</div>` : ''}
+                            </div>
+
+                            <!-- Feedback Box -->
+                            <div class="mt-4 bg-white/85 backdrop-blur-sm p-4 rounded-2xl border border-blue-100 shadow-sm relative">
+                                <i class="fa-solid fa-quote-left text-amber-500/40 text-lg absolute top-2 left-3"></i>
+                                <p class="text-xs text-slate-700 italic leading-relaxed pl-4 pr-1">"${stu.feedback}"</p>
+                            </div>
+                        </div>
+
+                        <!-- Card Bottom: Privacy badge and Direct Action CTA -->
+                        <div class="mt-6 pt-4 border-t border-blue-200/60 flex items-center justify-between gap-2 text-xs">
+                            <span class="text-slate-500 font-medium text-[11px]">VectorEd Mentorship</span>
+                            <a href="https://vectored-academy.netlify.app" target="_blank" rel="noopener noreferrer" class="bg-navy-900 hover:bg-navy-800 text-amber-custom hover:text-amber-400 font-bold px-3 py-1.5 rounded-xl transition-all duration-150 flex items-center space-x-1 shadow-sm">
+                                <span>Book Consultation</span>
+                                <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(cardWrapper);
+            });
+
+            updateCarouselLayout();
+        }
+
+        function getCardsPerPage() {
+            if (window.innerWidth >= 1024) return 3;
+            if (window.innerWidth >= 768) return 2;
+            return 1;
+        }
+
+        function updateCarouselLayout() {
+            const track = document.getElementById('studentGrid');
+            const totalCards = track.children.length;
+            const cardsPerPage = getCardsPerPage();
+
+            totalCarouselPages = Math.ceil(totalCards / cardsPerPage);
+            if (totalCarouselPages < 1) totalCarouselPages = 1;
+
+            if (currentCarouselIndex >= totalCarouselPages) {
+                currentCarouselIndex = totalCarouselPages - 1;
+            }
+            if (currentCarouselIndex < 0) currentCarouselIndex = 0;
+
+            // Calculate shift percentage
+            const shiftPercentage = currentCarouselIndex * 100;
+            track.style.transform = `translateX(-${shiftPercentage}%)`;
+
+            // Update prev/next button states
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            if (prevBtn) prevBtn.disabled = currentCarouselIndex === 0;
+            if (nextBtn) nextBtn.disabled = currentCarouselIndex >= totalCarouselPages - 1;
+
+            renderCarouselPagination();
+        }
+
+        function moveCarousel(direction) {
+            currentCarouselIndex += direction;
+            updateCarouselLayout();
+        }
+
+        function goToCarouselPage(pageIndex) {
+            currentCarouselIndex = pageIndex;
+            updateCarouselLayout();
+        }
+
+        function renderCarouselPagination() {
+            const paginationContainer = document.getElementById('carouselPagination');
+            if (!paginationContainer) return;
+
+            paginationContainer.innerHTML = '';
+            if (totalCarouselPages <= 1) return;
+
+            for (let i = 0; i < totalCarouselPages; i++) {
+                const dot = document.createElement('button');
+                dot.onclick = () => goToCarouselPage(i);
+                dot.className = i === currentCarouselIndex
+                    ? "w-8 h-2.5 rounded-full bg-amber-500 transition-all duration-300"
+                    : "w-2.5 h-2.5 rounded-full bg-slate-700 hover:bg-slate-500 transition-all duration-300";
+                paginationContainer.appendChild(dot);
+            }
+        }
+
+        function filterStudents() {
+            currentCarouselIndex = 0;
+            renderDashboard();
+        }
+
+        // Admin Access Modal Control
+        function openAdminModal() {
+            if (isAdminAuthenticated) {
+                openAdminDashboard();
+            } else {
+                document.getElementById('adminAuthModal').classList.remove('hidden');
+                document.getElementById('adminPasswordInput').value = '';
+                document.getElementById('authErrorMsg').classList.add('hidden');
+            }
+        }
+
+        function closeAuthModal() {
+            document.getElementById('adminAuthModal').classList.add('hidden');
+        }
+
+        function togglePasswordVisibility() {
+            const passField = document.getElementById('adminPasswordInput');
+            const icon = document.getElementById('togglePassIcon');
+            if (passField.type === 'password') {
+                passField.type = 'text';
+                icon.className = "fa-solid fa-eye-slash";
+            } else {
+                passField.type = 'password';
+                icon.className = "fa-solid fa-eye";
+            }
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const enteredPass = document.getElementById('adminPasswordInput').value;
+            if (enteredPass === appData.adminPassword) {
+                isAdminAuthenticated = true;
+                closeAuthModal();
+                openAdminDashboard();
+            } else {
+                const err = document.getElementById('authErrorMsg');
+                err.innerText = "Incorrect password. Access denied.";
+                err.classList.remove('hidden');
+            }
+        }
+
+        function openAdminDashboard() {
+            document.getElementById('adminDashboardModal').classList.remove('hidden');
+            populateAdminDropdowns();
+            renderAdminTables();
+        }
+
+        function closeAdminDashboard() {
+            document.getElementById('adminDashboardModal').classList.add('hidden');
+            renderDashboard();
+        }
+
+        // Admin Internal Tab Switching
+        function switchAdminTab(sectionKey) {
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+                btn.className = "admin-tab-btn py-3 border-b-2 border-transparent text-slate-400 hover:text-white text-sm font-medium flex items-center space-x-2";
+            });
+            document.getElementById(`adminTab-${sectionKey}`).className = "admin-tab-btn py-3 border-b-2 border-amber-500 text-amber-custom text-sm font-bold flex items-center space-x-2";
+
+            ['students', 'universities', 'settings'].forEach(sec => {
+                document.getElementById(`adminSection-${sec}`).classList.add('hidden');
+            });
+            document.getElementById(`adminSection-${sectionKey}`).classList.remove('hidden');
+        }
+
+        // Populate School dropdown inside Student Form
+        function populateAdminDropdowns() {
+            const select = document.getElementById('inputStudentSchool');
+            select.innerHTML = '';
+            appData.universities.forEach(uni => {
+                const opt = document.createElement('option');
+                opt.value = uni.name;
+                opt.innerText = uni.name;
+                select.appendChild(opt);
+            });
+        }
+
+        function previewSelectedSchoolLogo() {
+            // Can be used if preview image element is present
+        }
+
+        // Render Admin Tables
+        function renderAdminTables() {
+            // Students Table
+            const stuTable = document.getElementById('adminStudentsTableBody');
+            stuTable.innerHTML = '';
+            appData.students.forEach(stu => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-900/50 transition-colors border-b border-slate-800/60";
+                tr.innerHTML = `
+                    <td class="py-3 px-4 font-semibold text-white">${stu.name}</td>
+                    <td class="py-3 px-4 text-xs"><span class="px-2.5 py-1 rounded-full bg-slate-800 text-amber-custom font-medium uppercase">${stu.category}</span></td>
+                    <td class="py-3 px-4">${stu.school}</td>
+                    <td class="py-3 px-4 text-xs text-blue-300 font-medium">${stu.course || 'N/A'}</td>
+                    <td class="py-3 px-4 text-xs">${stu.yearLevel}</td>
+                    <td class="py-3 px-4 text-right space-x-2">
+                        <button onclick="editStudent('${stu.id}')" class="text-amber-400 hover:text-amber-300 p-1.5 bg-slate-800 rounded-lg"><i class="fa-solid fa-pen text-xs"></i></button>
+                        <button onclick="deleteStudent('${stu.id}')" class="text-red-400 hover:text-red-300 p-1.5 bg-slate-800 rounded-lg"><i class="fa-solid fa-trash text-xs"></i></button>
+                    </td>
+                `;
+                stuTable.appendChild(tr);
+            });
+
+            // Universities Table
+            const uniTable = document.getElementById('adminUniversitiesTableBody');
+            uniTable.innerHTML = '';
+            appData.universities.forEach(uni => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-900/50 transition-colors border-b border-slate-800/60";
+                tr.innerHTML = `
+                    <td class="py-3 px-4">
+                        <img src="${uni.logo}" alt="Logo" class="w-8 h-8 rounded-full object-cover bg-white border border-slate-700" onerror="this.src='https://placehold.co/100x100/112238/F59E0B?text=U'">
+                    </td>
+                    <td class="py-3 px-4 font-semibold text-white">${uni.name}</td>
+                    <td class="py-3 px-4 text-xs text-slate-400 truncate max-w-xs">${uni.logo}</td>
+                    <td class="py-3 px-4 text-right space-x-2">
+                        <button onclick="editUniversity('${uni.id}')" class="text-amber-400 hover:text-amber-300 p-1.5 bg-slate-800 rounded-lg"><i class="fa-solid fa-pen text-xs"></i></button>
+                        <button onclick="deleteUniversity('${uni.id}')" class="text-red-400 hover:text-red-300 p-1.5 bg-slate-800 rounded-lg"><i class="fa-solid fa-trash text-xs"></i></button>
+                    </td>
+                `;
+                uniTable.appendChild(tr);
+            });
+        }
+
+        // Student CRUD Actions
+        function saveStudentEntry(e) {
+            e.preventDefault();
+            const id = document.getElementById('editStudentId').value;
+            const name = document.getElementById('inputStudentName').value;
+            const category = document.getElementById('inputStudentCategory').value;
+            const school = document.getElementById('inputStudentSchool').value;
+            const yearLevel = document.getElementById('inputStudentYearLevel').value;
+            const course = document.getElementById('inputStudentCourse').value;
+            const feedback = document.getElementById('inputStudentFeedback').value;
+
+            if (id) {
+                // Edit existing
+                const index = appData.students.findIndex(s => s.id === id);
+                if (index !== -1) {
+                    appData.students[index] = { id, name, category, school, yearLevel, course, feedback };
+                }
+                showNotification("Success", "Student record updated successfully.");
+            } else {
+                // Add new
+                const newStu = {
+                    id: 'stu-' + Date.now(),
+                    name, category, school, yearLevel, course, feedback
+                };
+                appData.students.unshift(newStu);
+                showNotification("Success", "New student record added successfully.");
+            }
+
+            resetStudentForm();
+            renderAdminTables();
+            triggerSync(false);
+        }
+
+        function editStudent(id) {
+            const stu = appData.students.find(s => s.id === id);
+            if (!stu) return;
+            document.getElementById('editStudentId').value = stu.id;
+            document.getElementById('inputStudentName').value = stu.name;
+            document.getElementById('inputStudentCategory').value = stu.category;
+            document.getElementById('inputStudentSchool').value = stu.school;
+            document.getElementById('inputStudentYearLevel').value = stu.yearLevel;
+            document.getElementById('inputStudentCourse').value = stu.course || '';
+            document.getElementById('inputStudentFeedback').value = stu.feedback;
+            
+            document.getElementById('studentFormTitle').innerText = "Edit Student Entry";
+            document.getElementById('cancelStudentEditBtn').classList.remove('hidden');
+        }
+
+        function resetStudentForm() {
+            document.getElementById('studentForm').reset();
+            document.getElementById('editStudentId').value = '';
+            document.getElementById('studentFormTitle').innerText = "Add New Student Entry";
+            document.getElementById('cancelStudentEditBtn').classList.add('hidden');
+        }
+
+        function deleteStudent(id) {
+            appData.students = appData.students.filter(s => s.id !== id);
+            renderAdminTables();
+            triggerSync(false);
+            showNotification("Deleted", "Student record has been removed.");
+        }
+
+        // University CRUD Actions
+        function saveUniversityEntry(e) {
+            e.preventDefault();
+            const id = document.getElementById('editUniId').value;
+            const name = document.getElementById('inputUniName').value;
+            const logo = document.getElementById('inputUniLogo').value;
+
+            if (id) {
+                const index = appData.universities.findIndex(u => u.id === id);
+                if (index !== -1) {
+                    appData.universities[index] = { id, name, logo };
+                }
+                showNotification("Success", "University roster updated successfully.");
+            } else {
+                const newUni = {
+                    id: 'uni-' + Date.now(),
+                    name, logo
+                };
+                appData.universities.push(newUni);
+                showNotification("Success", "New university added to roster.");
+            }
+
+            resetUniForm();
+            populateAdminDropdowns();
+            renderAdminTables();
+            triggerSync(false);
+        }
+
+        function editUniversity(id) {
+            const uni = appData.universities.find(u => u.id === id);
+            if (!uni) return;
+            document.getElementById('editUniId').value = uni.id;
+            document.getElementById('inputUniName').value = uni.name;
+            document.getElementById('inputUniLogo').value = uni.logo;
+
+            document.getElementById('uniFormTitle').innerText = "Edit University / School";
+            document.getElementById('cancelUniEditBtn').classList.remove('hidden');
+        }
+
+        function resetUniForm() {
+            document.getElementById('uniForm').reset();
+            document.getElementById('editUniId').value = '';
+            document.getElementById('uniFormTitle').innerText = "Add New University / School";
+            document.getElementById('cancelUniEditBtn').classList.add('hidden');
+        }
+
+        function deleteUniversity(id) {
+            const uni = appData.universities.find(u => u.id === id);
+            if (uni) {
+                // Check if any student uses this university
+                const used = appData.students.some(s => s.school === uni.name);
+                if (used) {
+                    showNotification("Cannot Delete", "This institution is assigned to active student records. Please reassign those students first.", true);
+                    return;
+                }
+            }
+            appData.universities = appData.universities.filter(u => u.id !== id);
+            populateAdminDropdowns();
+            renderAdminTables();
+            triggerSync(false);
+            showNotification("Deleted", "Institution removed from roster.");
+        }
+
+        // Password Change
+        function handlePasswordChange(e) {
+            e.preventDefault();
+            const current = document.getElementById('currentPassField').value;
+            const newPass = document.getElementById('newPassField').value;
+            const confirmPass = document.getElementById('confirmPassField').value;
+            const msg = document.getElementById('passwordChangeMsg');
+
+            if (current !== appData.adminPassword) {
+                msg.innerText = "Current password is incorrect.";
+                msg.className = "text-xs font-medium text-red-400";
+                return;
+            }
+
+            if (newPass !== confirmPass) {
+                msg.innerText = "New passwords do not match.";
+                msg.className = "text-xs font-medium text-red-400";
+                return;
+            }
+
+            if (newPass.length < 6) {
+                msg.innerText = "Password must be at least 6 characters long.";
+                msg.className = "text-xs font-medium text-red-400";
+                return;
+            }
+
+            appData.adminPassword = newPass;
+            msg.innerText = "Admin password updated successfully!";
+            msg.className = "text-xs font-medium text-emerald-400";
+            document.getElementById('currentPassField').value = '';
+            document.getElementById('newPassField').value = '';
+            document.getElementById('confirmPassField').value = '';
+            triggerSync(false);
+        }
+
+        // Google Sheets Web App Cloud Sync
+        function triggerSync(showToast = false) {
+            const syncDot = document.getElementById('syncDot');
+            const syncText = document.getElementById('syncText');
+            const syncIcon = document.getElementById('syncIcon');
+
+            syncDot.className = "h-2 w-2 rounded-full bg-amber-400 animate-ping";
+            syncText.innerText = "Syncing Cloud...";
+            if(syncIcon) syncIcon.classList.add('fa-spin');
+
+            // Save locally as backup / immediate cache
+            localStorage.setItem('vectored_dashboard_data', JSON.stringify(appData));
+
+            // POST to Google Apps Script Web App URL
+            const payload = JSON.stringify(appData);
+
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: payload
+            })
+            .then(() => {
+                setTimeout(() => {
+                    syncDot.className = "h-2 w-2 rounded-full bg-emerald-500";
+                    syncText.innerText = "Cloud Synced";
+                    if(syncIcon) syncIcon.classList.remove('fa-spin');
+                    if(showToast) showNotification("Cloud Sync", "Data successfully synchronized with Google Sheets cloud.");
+                }, 800);
+            })
+            .catch(err => {
+                console.warn("Sync warning (CORS/Network):", err);
+                setTimeout(() => {
+                    syncDot.className = "h-2 w-2 rounded-full bg-emerald-500";
+                    syncText.innerText = "Synced (Local Cache)";
+                    if(syncIcon) syncIcon.classList.remove('fa-spin');
+                    if(showToast) showNotification("Sync Notice", "Data saved locally and queued for cloud synchronization.");
+                }, 800);
+            });
+        }
+
+        function loadFromLocalStorageOrCloud() {
+            const local = localStorage.getItem('vectored_dashboard_data');
+            if (local) {
+                try {
+                    appData = JSON.parse(local);
+                } catch(e) {
+                    console.error("Error parsing local storage", e);
+                }
+            }
+
+            // Attempt GET fetch from Google Sheets Web App URL for initial load
+            fetch(WEB_APP_URL)
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.students && data.universities) {
+                        appData = data;
+                        renderDashboard();
+                    }
+                })
+                .catch(() => {
+                    // Fallback silently to local state
+                });
+        }
+    </script>
+</body>
+</html>
